@@ -1,35 +1,37 @@
-#!/bin/bash
-# Downloads the most recent version of VLC and installs it
-# Places installers into /tmp which is cleared on reboot
+#!/bin/sh
+# Downloads the last VLC version for OS X Intel64
 # Created by Owen Pragel on 11/8/2013.
-# Updated 3/14/14
+# Updated 4/3/14
 
 appName='VLC'
 
-echo $appName" auto-update and install"
+echo "$appName autoinstaller by 74bit\n"
 
-downloadDirectory='http://get.videolan.org:81/vlc/'
+# Program update feed/directory
+echo "Loading update list..."
+updateFeed='http://update.videolan.org/vlc/sparkle/vlc-intel64.xml'
+
+# Regex to match latest download url
+urlRegex='http://get.videolan.org/vlc/[0-9]\.[0-9]\.[0-9]/macosx/vlc-[0-9]\.[0-9]\.[0-9]\.dmg'
+# Gets the URL of the last VLC update listed on the feed
+downloadURL=$(curl -# $updateFeed | grep -o $urlRegex | tail -1 )
+# Isolates the current version number of VLC
+versionRegex='vlc-[0-9]\.[0-9]\.[0-9]'
+currentVersion=$(echo $downloadURL | grep -o $versionRegex )
+
+# Temporary local download directory
 localDirectory='/tmp/'
 
-# Regex to match latest version string
-versionRegex='vlc-......dmg'
+echo "Downloading: $downloadURL"
+echo "To: $localDirectory$currentVersion\n"
+curl $downloadURL -L -o $localDirectory$currentVersion -w '%{url_effective}'
 
-# Store the file name of the most curent version to be used at the end of directory url
+volumePath=$(hdiutil attach $localDirectory$currentVersion | grep -o -E -m1 '/Volumes/vlc-.....')
 
-currentVersion=$(curl $downloadDirectory | grep -o \"[0-9].[0-9].[0-9] | tail -c 6)
-
-# Concatenates download directory and current version filename (ex. http://web.com/ + download.zip)
-fileURL=$downloadDirectory$currentVersion"/macosx/vlc-"$currentVersion".dmg"
-echo "Downloading: $fileURL"
-echo -e "To: $localDirectory"vlc-"$currentVersion\n"
-curl $fileURL -L -o $localDirectory"vlc-"$currentVersion -w '%{url_effective}'
-
-volumePath=$(hdiutil attach $localDirectory"vlc-"$currentVersion | grep -o -E -m1 '/Volumes/vlc-.....')
-
-appPath="/VLC.app"
+appPath="/$appName.app"
 
 echo -n "Copying "$volumePath$appPath" to "/Applications$appPath
-cp -R $volumePath$appPath /Applications$appPath
+cp -Rf $volumePath$appPath /Applications$appPath
 
 hdiutil detach $volumePath
 
