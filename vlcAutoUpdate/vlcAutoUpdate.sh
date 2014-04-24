@@ -5,6 +5,8 @@
 
 appName='VLC'
 
+rm -rf "/Applications/$appName.app"
+
 echo "$appName autoinstaller by 74bit\n"
 
 # Program update feed/directory
