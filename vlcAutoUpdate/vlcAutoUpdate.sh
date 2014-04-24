@@ -23,15 +23,15 @@ currentVersion=$(echo $downloadURL | grep -o $versionRegex )
 localDirectory='/tmp/'
 
 echo "Downloading: $downloadURL"
-echo "To: $localDirectory$currentVersion\n"
+echo "To: $localDirectory$currentVersion"
 curl $downloadURL -L -o $localDirectory$currentVersion -w '%{url_effective}'
 
 volumePath=$(hdiutil attach $localDirectory$currentVersion | grep -o -E -m1 '/Volumes/vlc-.....')
 
 appPath="/$appName.app"
 
-echo -n "Copying "$volumePath$appPath" to "/Applications$appPath
-cp -Rf $volumePath$appPath /Applications$appPath
+echo "Copying $volumePath$appPath" to "/Applications$appPath"
+cp -Rfv "$volumePath$appPath" "/Applications$appPath"
 
 hdiutil detach $volumePath
 
