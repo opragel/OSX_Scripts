@@ -9,7 +9,6 @@ if [ $vpnMenuItem ]; then
 	echo "VPN menu item is already on the status bar!"
 else
 	sudo -u $lastUser defaults write /Users/$lastUser/Library/Preferences/com.apple.systemuiserver menuExtras -array-add "/System/Library/CoreServices/Menu Extras/VPN.menu"
-	
 fi
 
 sudo -u $lastUser defaults write /Users/$lastUser/Library/Preferences/com.apple.networkConnect VPNShowStatus -bool true
