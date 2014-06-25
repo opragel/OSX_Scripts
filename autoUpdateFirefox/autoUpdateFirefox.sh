@@ -18,7 +18,7 @@ echo "Installing/Updating Firefox to version $currentFirefoxVersion"
 
 if [[ "$currentFirefoxVersion" == "$localFirefoxVersion" ]]; then
 	echo "Firefox is already up-to-date! Exiting..."
-	exit 1
+	exit 2
 else
 	if [[ -d /Applications/Firefox.app/ ]]; then
 		echo 'Removing old version...'
@@ -26,7 +26,11 @@ else
 	fi
 	curl -GLo /tmp/firefox.dmg "https://download.mozilla.org/?product=firefox-$currentFirefoxVersion-SSL&os=osx&lang=en-US"
 	hdiutil mount -quiet -nobrowse /tmp/firefox.dmg
-	sudo cp -R /Volumes/Firefox/Firefox.app /Applications
+	if [ $? != 0 ]; then
+		echo "Unable to mount installer!"
+		exit 3
+	fi
+	ditto -rsrc /Volumes/Firefox/Firefox.app /Applications/Firefox.app
 	hdiutil unmount /Volumes/Firefox
 	rm /tmp/firefox.dmg
 	echo "Firefox updated! Exiting..."
