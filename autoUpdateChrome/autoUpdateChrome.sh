@@ -4,7 +4,7 @@
 # Usage: curl -fkL gist.github.com/raw/4364590/install-chrome.sh | sh
 
 curl -Lo /tmp/Google\ Chrome.dmg https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg
-hdiutil attach -silent /tmp/Google\ Chrome.dmg
+hdiutil attach -nobrowse -quiet /tmp/Google\ Chrome.dmg
 ditto -rsrc /Volumes/Google\ Chrome/Google\ Chrome.app /Applications/Google\ Chrome.app
 hdiutil detach /Volumes/Google\ Chrome
 rm /tmp/Google\ Chrome.dmg
