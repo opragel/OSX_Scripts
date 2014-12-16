@@ -8,11 +8,11 @@ vpnMenuItem=$(defaults read "/Users/$lastUser/Library/Preferences/com.apple.syst
 if [ "$vpnMenuItem" ]; then
 	echo "VPN menu item is already on the status bar!"
 else
-	su "$lastUser" defaults write "/Users/$lastUser/Library/Preferences/com.apple.systemuiserver" menuExtras -array-add "/System/Library/CoreServices/Menu Extras/VPN.menu"
+	sudo -u "$lastUser" defaults write "/Users/$lastUser/Library/Preferences/com.apple.systemuiserver" menuExtras -array-add "/System/Library/CoreServices/Menu Extras/VPN.menu"
 fi
 
-su "$lastUser" defaults write "/Users/$lastUser/Library/Preferences/com.apple.networkConnect" VPNShowStatus -bool true
-su "$lastUser" defaults write "/Users/$lastUser/Library/Preferences/com.apple.networkConnect" VPNShowTime -bool true
+sudo -u "$lastUser" defaults write "/Users/$lastUser/Library/Preferences/com.apple.networkConnect" VPNShowStatus -bool true
+sudo -u "$lastUser" defaults write "/Users/$lastUser/Library/Preferences/com.apple.networkConnect" VPNShowTime -bool true
 killall SystemUIServer
 
 exit 0
