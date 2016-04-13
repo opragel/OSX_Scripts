@@ -24,7 +24,7 @@ else
   if [[ $osVersion -le $minimumSystemVersion ]]; then
     printf "OS is below minimum version."
   else
-  	version=$(defaults read "$DMG_VOLUME_PATH/$APP_NAME/$APP_INFO_PLIST" "$APP_VERSION_KEY")
+    version=$(defaults read "$DMG_VOLUME_PATH/$APP_NAME/$APP_INFO_PLIST" "$APP_VERSION_KEY")
     printf "Installing $APP_PROCESS_NAME version %s" "$version"
     ditto -rsrc "$DMG_VOLUME_PATH/$APP_NAME" "$APP_PATH"
   fi
