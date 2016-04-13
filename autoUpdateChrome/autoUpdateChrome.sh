@@ -1,8 +1,10 @@
 #!/bin/bash
-
-# This script will download and install Google Chrome on a fresh installation of Mac OS X.
-# Usage: curl -fkL gist.github.com/raw/4364590/install-chrome.sh | sh
-
+osVersion=$(sw_vers -productVersion | awk -F. '{print $2}')
+if [[ $osVersion -lt 9 ]]; then
+    echo 'Chrome 50 only supports 10.9+ and later'
+    exit 10
+fi
+    
 if [ ! -z "$(pgrep 'Google Chrome')" ]; then
     echo 'Error: Google Chrome is currently running!'
     exit 1
